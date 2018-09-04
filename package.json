@@ -1,0 +1,25 @@
+{
+  "name": "@mjstahl/boring",
+  "version": "0.1.0",
+  "description": "Templating using JavaScript's tagged template strings. Designed for server-side rendering.",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjstahl/boring.git"
+  },
+  "keywords": [
+    "template",
+    "engine"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mjstahl/boring/issues"
+  },
+  "homepage": "https://github.com/mjstahl/boring#readme",
+  "devDependencies": {
+    "ava": "^0.25.0"
+  }
+}
