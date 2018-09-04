@@ -50,10 +50,10 @@ function handleValue(value) {
   if (typeof value === 'function') return '';
   // Don't want to stringify null or undefined
   if (value === null || value === undefined) return '';
+  // Avoid double encoding by marking encoded string.
   if (value.__encoded) return value;
 
   if (typeof value === 'object') {
-    if (typeof value.outerHTML === 'string') return value.outerHTML;
     return Object.keys(value).reduce(function (str, key) {
       if (str.length > 0) str += ' ';
       if (BOOL_PROPS.indexOf(key) !== -1) {
