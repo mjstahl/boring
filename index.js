@@ -57,10 +57,7 @@ function handleValue(value) {
     return Object.keys(value).reduce(function (str, key) {
       if (str.length > 0) str += ' ';
       if (BOOL_PROPS.indexOf(key) !== -1) {
-        if (value[key]) {
-          return str + key + '="' + key + '"';
-        }
-        return str;
+        return (value[key]) ? str + key + '="' + key + '"' : str;
       }
 
       const handled = handleValue(value[key]);
@@ -68,8 +65,7 @@ function handleValue(value) {
     }, '')
   }
 
-  const str = value.toString();
-  return str
+  return value.toString()
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
