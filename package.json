@@ -12,7 +12,9 @@
   },
   "keywords": [
     "template",
-    "engine"
+    "engine",
+    "html",
+    "javascript"
   ],
   "license": "MIT",
   "bugs": {
