@@ -4,26 +4,23 @@ const BOOL_PROPS = [
   'autofocus', 'checked', 'defaultchecked', 'disabled', 'formnovalidate',
   'indeterminate', 'readonly', 'required', 'selected', 'willvalidate'
 ];
-
 const BOOL_PROP_REGEX =
   new RegExp('(' + BOOL_PROPS.join('|') + ')=["\']?$', 'i');
 
-function boring(src) {
-  let boolMatch;
-  let pieces = src;
+function boring(pieces) {
   let output = '';
   for (let i = 0; i < pieces.length; i++) {
-    const piece = pieces[i]
+    const piece = pieces[i];
     if (i < pieces.length - 1) {
-      if ((boolMatch = BOOL_PROP_REGEX.exec(piece))) {
+      const boolMatch = BOOL_PROP_REGEX.exec(piece);
+      if (boolMatch) {
         output += piece.slice(0, boolMatch.index);
         if (arguments[i + 1]) {
           output += boolMatch[1] + '="' + boolMatch[1] + '"';
         }
         continue;
       }
-
-      const value = handleValue(arguments[i + 1])
+      const value = handleValue(arguments[i + 1]);
       if (piece[piece.length - 1] === '=') {
         output += piece + '"' + value + '"';
       } else {
@@ -34,8 +31,8 @@ function boring(src) {
     }
   }
 
-  // Avoid double encoding by marking encoded string. You cannot add properties
-  // to string literals
+  // Avoid double encoding by marking encoded string
+  // You cannot add properties to string literals
   const wrapper = new String(output);
   wrapper.__encoded = true;
   return wrapper;
@@ -44,7 +41,6 @@ function boring(src) {
 function handleValue(value) {
   // Assume that each item is a result of html``
   if (Array.isArray(value)) return value.join('');
-
   // Ignore event handlers, should probably warn that the results should
   // be strings, or evaluate that function
   if (typeof value === 'function') return '';
@@ -52,17 +48,15 @@ function handleValue(value) {
   if (value === null || value === undefined) return '';
   // Avoid double encoding by marking encoded string.
   if (value.__encoded) return value;
-
   if (typeof value === 'object') {
     return Object.keys(value).reduce(function (str, key) {
       if (str.length > 0) str += ' ';
       if (BOOL_PROPS.indexOf(key) !== -1) {
-        return (value[key]) ? str + key + '="' + key + '"' : str;
+        return (value[key]) ? `${str}${key}="${key}"` : str;
       }
-
       const handled = handleValue(value[key]);
-      return str + key + '="' + handled + '"';
-    }, '')
+      return `${str}${key}="${handled}"`;
+    }, '');
   }
 
   return value.toString()
