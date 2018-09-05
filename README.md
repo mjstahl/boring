@@ -2,7 +2,7 @@
 Templating using JavaScript's tagged template strings. Designed for server-side
 rendering.
 
-**This work is only possible because of those who have contributed to [choojs/nanohtml](https://github.com/choojs/nanohtml) (it is effectively a copy of the server portion)**.
+**This work is only possible because of those who have contributed to [choojs/nanohtml](https://github.com/choojs/nanohtml) (it is effectively a rewrite/copy of the server portion)**.
 
 ## Installation
 ```sh
@@ -35,6 +35,17 @@ const toRender = html`
 `;
 
 toRender //-> '<div class="abc" id="def">Hello</div>'
+```
+
+### Boolean Attributes
+```js
+const html = require('boring');
+
+const toRender = html`
+  <input disabled=${true} autofocus=${false}>
+`;
+
+toRender //-> '<input disabled="disabled" >'
 ```
 
 ### Escaped HTML
