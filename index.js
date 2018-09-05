@@ -32,17 +32,6 @@ function boolAttrResult(part, value, attr) {
     : [`${nonAttr}`, ''];
 }
 
-function escapeText(text) {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-  return text.replace(/[&<>"']/g, (m) => map[m]);
-}
-
 function valueToString(value) {
   if (value === null || value === undefined) return '';
   if (value.__encoded) return value;
@@ -57,6 +46,17 @@ function valueToString(value) {
     }, '');
   }
   return escapeText(value.toString());
+}
+
+function escapeText(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, (m) => map[m]);
 }
 
 module.exports = boring;
