@@ -33,22 +33,16 @@ function boolAttrResult(part, value, attr) {
 }
 
 function valueToString(value) {
-  // We don't want to see stringified null or undefined
   if (value === null || value === undefined) return '';
-  // Already encoded so return
   if (value.__encoded) return value;
-  // Should probably warn to evaluate the function before passing
   if (typeof value === 'function') return '';
-  // Assume that each item is a result of html``
   if (Array.isArray(value)) return value.join('');
-  // { class: 'abc', id: 'def' } -> class="abc" id="def"
   if (typeof value === 'object') {
     return Object.keys(value).reduce((str, key) => {
       if (str.length > 0) str += ' ';
-      if (BOOL_ATTRS.includes(key)) {
-        return (value[key]) ? `${str}${key}="${key}"` : str;
-      }
-      return `${str}${key}="${valueToString(value[key])}"`
+      return (BOOL_ATTRS.includes(key))
+        ? (value[key]) ? `${str}${key}="${key}"` : str
+        : `${str}${key}="${valueToString(value[key])}"`;
     }, '');
   }
   return value.toString()
