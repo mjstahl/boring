@@ -9,8 +9,8 @@ test('server side render', function (t) {
       <h1>hello!</h1>
     </div>
   `;
-  t.true(rendered.indexOf('<h1>hello!</h1>') !== -1, 'contains a child element');
-  t.true(rendered.indexOf('<div class="testing">') !== -1, 'attribute gets set');
+  t.true(rendered.includes('<h1>hello!</h1>'), 'contains a child element');
+  t.true(rendered.includes('<div class="testing">'), 'attribute gets set');
 });
 
 test('passing another element to html on server side render', function (t) {
@@ -21,7 +21,7 @@ test('passing another element to html on server side render', function (t) {
       ${button}
     </div>
   `;
-  t.true(rendered.indexOf('<button>click</button>') !== -1, 'button rendered correctly');
+  t.true(rendered.includes('<button>click</button>'), 'button rendered correctly');
 });
 
 test('style attribute', function (t) {
