@@ -32,6 +32,17 @@ function boolAttrResult(part, value, attr) {
     : [`${nonAttr}`, ''];
 }
 
+function escapeText(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, (m) => map[m]);
+}
+
 function valueToString(value) {
   if (value === null || value === undefined) return '';
   if (value.__encoded) return value;
@@ -45,12 +56,7 @@ function valueToString(value) {
         : `${str}${key}="${valueToString(value[key])}"`;
     }, '');
   }
-  return value.toString()
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+  return escapeText(value.toString());
 }
 
 module.exports = boring;

@@ -1,3 +1,5 @@
+'use strict'
+
 const test = require('ava');
 const html = require('./index');
 const raw = require('./raw');
@@ -26,24 +28,24 @@ test('passing another element to html on server side render', function (t) {
 
 test('style attribute', function (t) {
   t.plan(1);
+  const expected = `
+    <h1 style="color: red">
+      Hey TEST, <span style="color: blue">This</span> is a card!!!
+    </h1>
+  `;
   const name = 'test';
   const result = html`
     <h1 style="color: red">
       Hey ${name.toUpperCase()}, <span style="color: blue">This</span> is a card!!!
     </h1>
   `.toString();
-  const expected = `
-    <h1 style="color: red">
-      Hey TEST, <span style="color: blue">This</span> is a card!!!
-    </h1>
-  `;
   t.is(result, expected);
 })
 
 test('unescape html', function (t) {
   t.plan(1);
-  const result = raw('<span>Hello <strong>there</strong></span>').toString();
   const expected = '<span>Hello <strong>there</strong></span>';
+  const result = raw('<span>Hello <strong>there</strong></span>').toString();
   t.is(result, expected);
 })
 
