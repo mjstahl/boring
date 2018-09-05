@@ -2,7 +2,7 @@
 Templating using JavaScript's tagged template strings. Designed for server-side
 rendering.
 
-**This work is only possible because of those who have contributed to [choojs/nanohtml](https://github.com/choojs/nanohtml) (it is effectively a rewrite/copy of the server portion)**.
+**This work is only possible because of those who have contributed to [choojs/nanohtml](https://github.com/choojs/nanohtml).**
 
 ## Installation
 ```sh
