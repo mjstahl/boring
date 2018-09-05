@@ -61,7 +61,7 @@ const raw = require('boring/raw');
 const header = '<h1>This a regular string</h1>';
 const toRender = html`
   <body>
-    ${raw(string)}
+    ${raw(header)}
   </body>
 `;
 
