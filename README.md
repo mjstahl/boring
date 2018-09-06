@@ -11,39 +11,39 @@ $ npm install --save @mjstahl/boring
 
 ## Usage
 ```js
-const html = require('boring');
+const html = require('boring')
 
 const button = html`
   <button>click</button>
-`;
+`
 const toRender = html`
   <div class="testing">
     ${button}
   </div>
-`;
+`.toString()
 
 toRender //-> '<div class="testing"><button>click</button></div>'
 ```
 
 ### Spread Attributes
 ```js
-const html = require('boring');
+const html = require('boring')
 
-const props = { class: 'abc', id: 'def' };
+const props = { class: 'abc', id: 'def' }
 const toRender = html`
   <div ${props}>Hello</div>
-`;
+`.toString()
 
 toRender //-> '<div class="abc" id="def">Hello</div>'
 ```
 
 ### Boolean Attributes
 ```js
-const html = require('boring');
+const html = require('boring')
 
 const toRender = html`
   <input disabled=${true} autofocus=${false}>
-`;
+`.toString()
 
 toRender //-> '<input disabled="disabled" >'
 ```
@@ -55,15 +55,15 @@ another function (for example: a markdown renderer). Use `boring/raw` for to
 interpolate HTML directly.
 
 ```js
-const html = require('boring');
-const raw = require('boring/raw');
+const html = require('boring')
+const raw = require('boring/raw')
 
-const header = '<h1>This a regular string</h1>';
+const header = '<h1>This a regular string</h1>'
 const toRender = html`
   <body>
     ${raw(header)}
   </body>
-`;
+`.toString()
 
 toRender //-> <body><h1>This is a regular string</h1></body>
 ```

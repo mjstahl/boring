@@ -4,7 +4,19 @@ const BOOL_ATTRS = [
   'autofocus', 'checked', 'defaultchecked', 'disabled', 'formnovalidate',
   'indeterminate', 'readonly', 'required', 'selected', 'willvalidate'
 ]
-const BOOL_ATTR_REGEX = new RegExp(`(${BOOL_ATTRS.join('|')})=["']?$`, 'i')
+const BOOL_ATTR_REGEX =
+  new RegExp(`(${BOOL_ATTRS.join('|')})=["']?$`, 'i')
+
+const ESCAPE_CHARS = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#x27;',
+  '`': '&#x60;'
+}
+const ESCAPE_REGEX =
+  new RegExp(`(?:${Object.keys(ESCAPE_CHARS).join('|')})`, 'g')
 
 function boring () {
   const [parts, ...values] = arguments
@@ -20,9 +32,9 @@ function boring () {
       const value = (a.slice(-1) === '=') ? `"${b}"` : b
       return a.concat(value)
     })
-  const wrapper = new String(rendered) // eslint-disable-line no-new-wrappers
-  wrapper.__encoded = true
-  return wrapper
+  const wrapped = new String(rendered) // eslint-disable-line no-new-wrappers
+  wrapped.__encoded = true
+  return wrapped
 }
 
 function boolAttrResult (part, value, attr) {
@@ -45,18 +57,7 @@ function valueToString (value) {
         : `${str}${key}="${valueToString(value[key])}"`
     }, '')
   }
-  return escapeText(value)
-}
-
-function escapeText (text) {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  }
-  return text.replace(/[&<>"']/g, (m) => map[m])
+  return value.replace(ESCAPE_REGEX, (m) => ESCAPE_CHARS[m])
 }
 
 module.exports = boring
