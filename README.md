@@ -7,6 +7,27 @@ rendering.
 $ npm install --save @mjstahl/boring
 ```
 
+## API
+
+`render(template: String[, values: Object]) -> String`
+
+Render the template and return the String result. If JavaScript expressions
+exist within the template, those expressions will be evaluated with regards to
+the provided values.
+
+`html\`template: TemplateLiteral` -> Object`
+
+A tag function the evaluates and escapes the provided template literal. Just
+like all template literals, it will error out if any expressions reference
+variables not within the current scope. The Object returned is a string with
+extra properties, `.toString` the result for the least amount of surprises.
+
+`raw(html: String) -> Object`
+
+Use `raw` in a template where the expression is expected to return HTML. You
+do not want to escape HTML twice. If used within a function (not in a template),
+`.toString` the result for the least amount of surprises.
+
 ## Express 3.x
 After installing the `boring` package, we set the location of the views and
 the engine Express will use to render those views.
@@ -19,8 +40,8 @@ the engine Express will use to render those views.
   app.set('views', __dirname + '/views');
 ```
 
-Next create a file named `index.html` in the `./views` directory with the following
-content:
+Next create a file named `index.html` in the `./views` directory with the
+following content:
 
 ```js
 <html>
@@ -45,6 +66,7 @@ Now we can configure a route that will render the `index.html` file.
 ```
 
 ## Usage
+
 ```js
 const { render } = require('@mjstahl/boring')
 
@@ -57,7 +79,7 @@ result //-> '<p>High 5!</p>'
 ```
 
 ```js
-const { html } = require('@mjstahl/boring')
+const { html, raw } = require('@mjstahl/boring')
 
 const button = html`
   <button>click</button>
