@@ -7,6 +7,10 @@ rendering.
 $ npm install --save @mjstahl/boring
 ```
 
+```js
+const { html, raw, render } = require('@mjstahl/boring')
+```
+
 ## API
 
 `render(template: String[, values: Object]) -> String`
@@ -15,7 +19,7 @@ Render the template and return the String result. If JavaScript expressions
 exist within the template, those expressions will be evaluated with regards to
 the provided values.
 
-`html\`template: TemplateLiteral` -> Object`
+```html`template: TemplateLiteral` -> Object```
 
 A tag function the evaluates and escapes the provided template literal. Just
 like all template literals, it will error out if any expressions reference
@@ -33,11 +37,11 @@ After installing the `boring` package, we set the location of the views and
 the engine Express will use to render those views.
 
 ```js
-  const boring = require('@mjstahl/boring')
+const boring = require('@mjstahl/boring')
 
-  app.engine('html', boring);
-  app.set('view engine', 'html');
-  app.set('views', __dirname + '/views');
+app.engine('html', boring);
+app.set('view engine', 'html');
+app.set('views', __dirname + '/views');
 ```
 
 Next create a file named `index.html` in the `./views` directory with the
@@ -57,12 +61,12 @@ following content:
 Now we can configure a route that will render the `index.html` file.
 
 ```js
-  app.get('/', (req, res) => {
-    res.render('index', {
-      title: 'Your first boring template',
-      message: '<strong>Looking good!</strong>'
-    })
+app.get('/', (req, res) => {
+  res.render('index', {
+    title: 'Your first boring template',
+    message: '<strong>Looking good!</strong>'
   })
+})
 ```
 
 ## Usage
