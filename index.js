@@ -57,7 +57,9 @@ function valueToString (value) {
         : `${str}${key}="${valueToString(value[key])}"`
     }, '')
   }
-  return value.replace(ESCAPE_REGEX, (m) => ESCAPE_CHARS[m])
+  return (value.replace)
+    ? value.replace(ESCAPE_REGEX, (m) => ESCAPE_CHARS[m])
+    : value
 }
 
 module.exports = boring
