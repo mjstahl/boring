@@ -79,7 +79,9 @@ const result = render(template, {
   howMany: 5
 })
 
-result //-> '<p>High 5!</p>'
+/**
+<p>High 5!</p
+ */
 ```
 
 ```js
@@ -94,7 +96,11 @@ const result = html`
   </div>
 `.toString()
 
-result //-> '<div class="testing"><button>click</button></div>'
+/**
+<div class="testing">
+  <button>click</button>
+</div>
+ */
 ```
 
 ### Spread Attributes
@@ -106,7 +112,9 @@ const result = html`
   <div ${props}>Hello</div>
 `.toString()
 
-result //-> '<div class="abc" id="def">Hello</div>'
+/**
+<div class="abc" id="def">Hello</div>
+ */
 ```
 
 ### Boolean Attributes
@@ -117,7 +125,32 @@ const result = html`
   <input disabled=${true} autofocus=${false}>
 `.toString()
 
-result //-> '<input disabled="disabled" >'
+/**
+<input disabled="disabled" >
+ */
+```
+
+### List Rendering
+Boring will join list items with `''`. So if you want pretty DOM, you have to
+handle the whitespace in your template.
+
+```js
+const { html } = require('@mjstahl/boring')
+
+const states = { AL: 'Alabama', GA: 'Georgia' }
+const result = html`
+  <select>
+    ${Object.keys(states).map((s) => {
+      return html`<option value="${s}">${states[s]}</option>`
+    })}
+  </select>
+`.toString()
+
+/**
+<select>
+  <option value="AL">Alabama</option><option value="GA">Georgia</option>
+</select>
+ */
 ```
 
 ### Escaped HTML
@@ -136,7 +169,11 @@ const result = html`
   </body>
 `.toString()
 
-result //-> <body><h1>This is a regular string</h1></body>
+/**
+<body>
+  <h1>This is a regular string</h1>
+</body>
+ */
 ```
 
 ## Attribution

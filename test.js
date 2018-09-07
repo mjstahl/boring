@@ -5,7 +5,7 @@
 const test = require('ava')
 const { html, raw, render } = require('./index')
 
-test('server side render', function (t) {
+test('server side render', t => {
   t.plan(2)
   const rendered = html`
     <div class="testing">
@@ -16,7 +16,7 @@ test('server side render', function (t) {
   t.true(rendered.includes('<div class="testing">'), 'attribute gets set')
 })
 
-test('passing another element to html on server side render', function (t) {
+test('passing another element to html on server side render', t => {
   t.plan(1)
   const button = html`<button>click</button>`
   const rendered = html`
@@ -27,7 +27,7 @@ test('passing another element to html on server side render', function (t) {
   t.true(rendered.includes('<button>click</button>'), 'button rendered correctly')
 })
 
-test('style attribute', function (t) {
+test('style attribute', t => {
   t.plan(1)
   const expected = `
     <h1 style="color: red">
@@ -43,21 +43,21 @@ test('style attribute', function (t) {
   t.is(result, expected)
 })
 
-test('unescape html', function (t) {
+test('unescape html', t => {
   t.plan(1)
   const expected = '<span>Hello <strong>there</strong></span>'
   const result = raw('<span>Hello <strong>there</strong></span>').toString()
   t.is(result, expected)
 })
 
-test('unescape html inside html', function (t) {
+test('unescape html inside html', t => {
   t.plan(1)
   const expected = '<span>Hello <strong>there</strong></span>'
   const result = html`${raw('<span>Hello <strong>there</strong></span>')}`.toString()
   t.is(result, expected)
 })
 
-test('event attribute', function (t) {
+test('event attribute', t => {
   t.plan(1)
   function onmouseover () {}
   function onmouseout () {}
@@ -74,14 +74,14 @@ test('event attribute', function (t) {
   t.is(result, expected)
 })
 
-test('boolean attribute', function (t) {
+test('boolean attribute', t => {
   t.plan(1)
   const expected = '<input disabled="disabled" >'
   const result = html`<input disabled=${true} autofocus=${false}>`.toString()
   t.is(result, expected)
 })
 
-test('spread attributes', function (t) {
+test('spread attributes', t => {
   t.plan(1)
   const props = { class: 'abc', id: 'def' }
   const expected = '<div class="abc" id="def">Hello</div>'
@@ -110,6 +110,24 @@ test('unescaped/raw HTML value', t => {
   const expected = '<p><strong>Up High</strong></p>'
   const result = render(template, {
     highFive: '<strong>Up High</strong>'
+  })
+  t.is(result, expected)
+})
+
+test('loop over object creating select options', t => {
+  const template =
+    '<select>' +
+      '${Object.keys(states).map((s) => {' +
+        'return html`<option value="${s}">${states[s]}</option>`' +
+      '})}' +
+    '</select>'
+  const expected =
+    '<select><option value="AL">Alabama</option><option value="GA">Georgia</option></select>'
+  const result = render(template, {
+    states: {
+      AL: 'Alabama',
+      GA: 'Georgia'
+    }
   })
   t.is(result, expected)
 })
