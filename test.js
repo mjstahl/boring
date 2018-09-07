@@ -1,8 +1,9 @@
+/* eslint-disable no-template-curly-in-string */
+
 'use strict'
 
 const test = require('ava')
-const html = require('./index')
-const raw = require('./raw')
+const { html, raw, render } = require('./index')
 
 test('server side render', function (t) {
   t.plan(2)
@@ -85,5 +86,30 @@ test('spread attributes', function (t) {
   const props = { class: 'abc', id: 'def' }
   const expected = '<div class="abc" id="def">Hello</div>'
   const result = html`<div ${props}>Hello</div>`.toString()
+  t.is(result, expected)
+})
+
+test('render HTML only', t => {
+  t.plan(1)
+  const template = '<p>Hello World</p>'
+  const result = render(template)
+  t.is(template, result)
+})
+
+test('simple value', t => {
+  t.plan(1)
+  const template = '<p>High ${howMany}</p>'
+  const expected = '<p>High 5</p>'
+  const result = render(template, { howMany: 5 })
+  t.is(result, expected)
+})
+
+test('unescaped/raw HTML value', t => {
+  t.plan(1)
+  const template = '<p>${raw(highFive)}</p>'
+  const expected = '<p><strong>Up High</strong></p>'
+  const result = render(template, {
+    highFive: '<strong>Up High</strong>'
+  })
   t.is(result, expected)
 })
