@@ -118,7 +118,7 @@ test('loop over object creating select options', t => {
   const template =
     '<select>' +
       '${Object.keys(states).map((s) => {' +
-        'return html`<option value="${s}">${states[s]}</option>`' +
+        'return `<option value="${s}">${states[s]}</option>`' +
       '})}' +
     '</select>'
   const expected =

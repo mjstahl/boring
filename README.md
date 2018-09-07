@@ -141,7 +141,7 @@ const states = { AL: 'Alabama', GA: 'Georgia' }
 const result = html`
   <select>
     ${Object.keys(states).map((s) => {
-      return html`<option value="${s}">${states[s]}</option>`
+      return `<option value="${s}">${states[s]}</option>`
     })}
   </select>
 `.toString()
