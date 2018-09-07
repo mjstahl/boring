@@ -156,8 +156,8 @@ const result = html`
 ### Escaped HTML
 By default all content inside template strings is escaped. This is great for
 strings, but not ideal if you want to insert HTML that's been returned from
-another function (for example: a markdown renderer). Use `boring/raw` for to
-interpolate HTML directly.
+another function (for example: a markdown renderer). Use `boring/raw` for
+interpolating HTML directly.
 
 ```js
 const { html, raw } = require('@mjstahl/boring')
