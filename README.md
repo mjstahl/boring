@@ -39,7 +39,7 @@ the engine Express will use to render those views.
 ```js
 const boring = require('@mjstahl/boring')
 
-app.engine('html', boring);
+app.engine('html', boring.renderFile);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
 ```
@@ -53,7 +53,7 @@ following content:
     <title>${title}</title>
   </head>
   <body>
-    <p>${raw(message)}</p>
+    <h1>${message}</h1>
   </body>
 </html>
 ```
@@ -64,7 +64,7 @@ Now we can configure a route that will render the `index.html` file.
 app.get('/', (req, res) => {
   res.render('index', {
     title: 'Your first boring template',
-    message: '<strong>Looking good!</strong>'
+    message: 'Looking good!'
   })
 })
 ```

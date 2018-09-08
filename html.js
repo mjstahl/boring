@@ -18,7 +18,7 @@ const ESCAPE_CHARS = {
 const ESCAPE_REGEX =
   new RegExp(`(?:${Object.keys(ESCAPE_CHARS).join('|')})`, 'g')
 
-function boring () {
+function html () {
   const [parts, ...values] = arguments
   const rendered = parts
     .map((part, i) => {
@@ -62,4 +62,4 @@ function valueToString (value) {
     : value
 }
 
-module.exports = boring
+module.exports = html

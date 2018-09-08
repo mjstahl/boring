@@ -3,10 +3,10 @@
 'use strict'
 
 const fs = require('fs')
-const html = require('./boring')
+const html = require('./html')
 const raw = require('./raw')
 
-exports.__express = function (path, values, callback) {
+function renderFile (path, values, callback) {
   fs.readFile(path, function (err, content) {
     if (err) return callback(err)
     return callback(null, render(content, values))
@@ -26,4 +26,4 @@ function render (content, options = {}) {
   const evaluate = new Function(...vars, 'html', 'raw', body)
   return evaluate(...vals, html, raw).toString()
 }
-module.exports = { html, raw, render }
+module.exports = { html, raw, render, renderFile }
