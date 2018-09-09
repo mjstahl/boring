@@ -9,7 +9,11 @@ const raw = require('./raw')
 function renderFile (path, values, callback) {
   fs.readFile(path, function (err, content) {
     if (err) return callback(err)
-    return callback(null, render(content, values))
+    try {
+      return callback(null, render(content, values))
+    } catch (e) {
+      return callback(new Error(`${e.message} in "${path}"`))
+    }
   })
 }
 
