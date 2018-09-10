@@ -89,32 +89,40 @@ test('spread attributes', t => {
   t.is(result, expected)
 })
 
-test('render HTML only', t => {
+test('render HTML only', async t => {
   t.plan(1)
   const template = '<p>Hello World</p>'
-  const result = render(template)
+  const result = await render(template)
   t.is(template, result)
 })
 
-test('simple value', t => {
+test('simple value', async t => {
   t.plan(1)
   const template = '<p>High ${howMany}</p>'
   const expected = '<p>High 5</p>'
-  const result = render(template, { howMany: 5 })
+  const result = await render(template, { howMany: 5 })
   t.is(result, expected)
 })
 
-test('unescaped/raw HTML value', t => {
+test('accept promises as values', async t => {
+  t.plan(1)
+  const template = '<p>High ${howMany}</p>'
+  const expected = '<p>High 5</p>'
+  const result = await render(template, { howMany: Promise.resolve(5) })
+  t.is(result, expected)
+})
+
+test('unescaped/raw HTML value', async t => {
   t.plan(1)
   const template = '<p>${raw(highFive)}</p>'
   const expected = '<p><strong>Up High</strong></p>'
-  const result = render(template, {
+  const result = await render(template, {
     highFive: '<strong>Up High</strong>'
   })
   t.is(result, expected)
 })
 
-test('loop over object creating select options', t => {
+test('loop over object creating select options', async t => {
   const template =
     '<select>' +
       '${Object.keys(states).map((s) => {' +
@@ -123,7 +131,7 @@ test('loop over object creating select options', t => {
     '</select>'
   const expected =
     '<select><option value="AL">Alabama</option><option value="GA">Georgia</option></select>'
-  const result = render(template, {
+  const result = await render(template, {
     states: {
       AL: 'Alabama',
       GA: 'Georgia'

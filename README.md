@@ -13,7 +13,7 @@ const { html, raw, render } = require('@mjstahl/boring')
 
 ## API
 
-`render(template: String[, values: Object]) -> String`
+`render(template: String[, values: Object]) -> Promise`
 
 Render the template and return the String result. If JavaScript expressions
 exist within the template, those expressions will be evaluated with regards to

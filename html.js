@@ -32,9 +32,7 @@ function html () {
       const value = (a.slice(-1) === '=') ? `"${b}"` : b
       return a.concat(value)
     })
-  const wrapped = new String(rendered) // eslint-disable-line no-new-wrappers
-  wrapped.__encoded = true
-  return wrapped
+  return encoded(rendered)
 }
 
 function boolAttrResult (part, value, attr) {
@@ -62,4 +60,10 @@ function valueToString (value) {
     : value
 }
 
-module.exports = html
+function encoded (tag) {
+  var wrapper = new String(tag) // eslint-disable-line no-new-wrappers
+  wrapper.__encoded = true
+  return wrapper
+}
+
+module.exports = { html, raw: encoded }
