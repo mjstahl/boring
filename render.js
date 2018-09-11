@@ -16,7 +16,7 @@ function include (file, values) {
     location = file
   } else {
     location = path.join(TEMPLATE_DIR, file)
-    // throw Error('"include" from within a template is not currently supported')
+    throw Error('"include" from within a template is not currently supported')
   }
   let contents = FILE_CACHE[location]
   if (!contents) {
