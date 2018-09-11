@@ -31,7 +31,7 @@ with the 0th argument set to any error or the 1st argument set to a result. If
 `callback` is not specific the function will return a `Promise`.
 
 ## Template API
-`include(file: String[, values: Object]) -> Promise` **(NOT SUPPORTED, Expected in v2.2)**
+`include(file: String[, values: Object]) -> Promise` **(NOT SUPPORTED, Expected in v3.1)**
 
 Evaluate a template file located relative to the current template. If JavaScript
 expressions exist within the template, those expressions will be evaluated with
@@ -186,7 +186,7 @@ const result = html`
  */
 ```
 
-### Modularizing Templates (NOT SUPPORTED, Expected in v2.2)
+### Modularizing Templates (NOT SUPPORTED, Expected in v3.1)
 Let's assume we have a `views` directory that contained three files: `index.html`
 `header.html`, and `footer.html`. The contents of each file are as follows:
 
