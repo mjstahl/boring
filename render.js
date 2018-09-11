@@ -9,14 +9,16 @@ const { html, raw } = require('./html')
 const FILE_CACHE = {}
 let TEMPLATE_DIR = ''
 
-function include (file, values) {
+const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor
+
+async function include (file, values) {
   let location
   if (path.isAbsolute(file)) {
     TEMPLATE_DIR = path.dirname(file)
     location = file
   } else {
     location = path.join(TEMPLATE_DIR, file)
-    throw Error('"include" from within a template is not currently supported')
+    // throw Error('"include" from within a template is not currently supported')
   }
   let contents = FILE_CACHE[location]
   if (!contents) {
@@ -34,10 +36,12 @@ async function renderTemplate (content, values = {}) {
   }, [[], []])
   const body = `
     'use strict'
-    return html\`${content}\`
+    return await html\`${content}\`
   `
-  const evaluate = new Function(...vars, 'html', 'include', 'raw', body)
-  return evaluate(...await Promise.all(vals), html, include, raw).toString()
+  const evaluate = new AsyncFunction(...vars, 'html', 'include', 'raw', body)
+  return Promise.all(vals).then((v) => {
+    return evaluate(...v, html, include, raw).then(r => r.toString())
+  })
 }
 
 module.exports = { include, renderTemplate }

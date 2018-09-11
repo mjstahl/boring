@@ -190,21 +190,16 @@ test('renderFile as promise with values', async t => {
   t.is(expected, result)
 })
 
-test.skip('renderFile that includes another template', async t => {
+test('renderFile that includes another template', async t => {
   t.plan(1)
   const expected =
 `<html>
-<head>
-  <title>Hello Boring!</title>
-</head>
 <body>
   <header><h1>Whaaat!</h1></header>
-  <p>This is the body.</p>
 </body>
 </html>`
   const location = path.join(__dirname, 'test/index.html')
   const result = await renderFile(location, {
-    title: 'Hello Boring!',
     header: {
       title: 'Whaaat!'
     }

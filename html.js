@@ -18,8 +18,7 @@ const ESCAPE_CHARS = {
 const ESCAPE_REGEX =
   new RegExp(`(?:${Object.keys(ESCAPE_CHARS).join('|')})`, 'g')
 
-function html () {
-  let [parts, ...values] = arguments
+function html (parts, ...values) {
   const rendered = parts
     .map((part, i) => {
       const boolAttr = BOOL_ATTR_REGEX.exec(part)
@@ -28,11 +27,13 @@ function html () {
         : [part, valueToString(values[i])]
     })
     .reduce((a, b) => a.concat(b))
-    .reduce((a, b) => {
+  return Promise.all(rendered).then(pieces => {
+    const merged = pieces.reduce((a, b) => {
       const value = (a.slice(-1) === '=') ? `"${b}"` : b
       return a.concat(value)
     })
-  return encoded(rendered)
+    return encoded(merged)
+  })
 }
 
 function boolAttrResult (part, value, attr) {
@@ -44,7 +45,7 @@ function boolAttrResult (part, value, attr) {
 
 function valueToString (value) {
   if (value === null || value === undefined) return ''
-  if (value.__encoded) return value
+  if (value.__encoded || value instanceof Promise) return value
   if (typeof value === 'function') return ''
   if (Array.isArray(value)) return value.join('')
   if (typeof value === 'object') {
