@@ -1,6 +1,6 @@
 {
   "name": "@mjstahl/boring",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Templating using JavaScript's tagged template strings. Designed for server-side rendering.",
   "main": "index.js",
   "scripts": {
