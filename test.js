@@ -4,32 +4,31 @@
 
 const path = require('path')
 const test = require('ava')
-const { renderFile } = require('./index')
-const { html, raw, render } = require('./render')
+const { render, renderFile } = require('./index')
 
-test('server side render', t => {
+test('server side render', async t => {
   t.plan(2)
-  const rendered = html`
+  const rendered = await render(`
     <div class="testing">
       <h1>hello!</h1>
     </div>
-  `
+  `)
   t.true(rendered.includes('<h1>hello!</h1>'), 'contains a child element')
   t.true(rendered.includes('<div class="testing">'), 'attribute gets set')
 })
 
-test('passing another element to html on server side render', t => {
+test('passing another element to html on server side render', async t => {
   t.plan(1)
-  const button = html`<button>click</button>`
-  const rendered = html`
+  const button = await render(`<button>click</button>`)
+  const rendered = await render(`
     <div class="testing">
       ${button}
     </div>
-  `
+  `)
   t.true(rendered.includes('<button>click</button>'), 'button rendered correctly')
 })
 
-test('style attribute', t => {
+test('style attribute', async t => {
   t.plan(1)
   const expected = `
     <h1 style="color: red">
@@ -37,57 +36,47 @@ test('style attribute', t => {
     </h1>
   `
   const name = 'test'
-  const result = html`
+  const result = await render(`
     <h1 style="color: red">
       Hey ${name.toUpperCase()}, <span style="color: blue">This</span> is a card!!!
     </h1>
-  `.toString()
+  `)
   t.is(expected, result)
 })
 
-test('unescape html', t => {
+test('unescape html', async t => {
   t.plan(1)
   const expected = '<span>Hello <strong>there</strong></span>'
-  const result = raw('<span>Hello <strong>there</strong></span>').toString()
+  const result = await render('<span>Hello <strong>there</strong></span>')
   t.is(expected, result)
 })
 
-test('unescape html inside html', t => {
+test('event attribute', async t => {
   t.plan(1)
-  const expected = '<span>Hello <strong>there</strong></span>'
-  const result = html`${raw('<span>Hello <strong>there</strong></span>')}`.toString()
+  const template = '<div onmouseover="${onmouseover}">Hello</div>'
+  const expected = '<div onmouseover="">Hello</div>'
+  const result = await render(template, {
+    onmouseover: function () {}
+  })
   t.is(expected, result)
 })
 
-test('event attribute', t => {
+test('boolean attribute', async t => {
   t.plan(1)
-  function onmouseover () {}
-  function onmouseout () {}
-  const expected = `
-    <div onmouseover="" onmouseout="">
-      Hello
-    </div>
-  `
-  const result = html`
-    <div onmouseover="${onmouseover}" onmouseout=${onmouseout}>
-      Hello
-    </div>
-  `.toString()
-  t.is(expected, result)
-})
-
-test('boolean attribute', t => {
-  t.plan(1)
+  const template = '<input disabled=${disabled} autofocus=${autofocus}>'
   const expected = '<input disabled="disabled" >'
-  const result = html`<input disabled=${true} autofocus=${false}>`.toString()
+  const result = await render(template, {
+    disabled: true,
+    autofocus: false
+  })
   t.is(expected, result)
 })
 
-test('spread attributes', t => {
+test('spread attributes', async t => {
   t.plan(1)
-  const props = { class: 'abc', id: 'def' }
+  const template = '<div ${props}>Hello</div>'
   const expected = '<div class="abc" id="def">Hello</div>'
-  const result = html`<div ${props}>Hello</div>`.toString()
+  const result = await render(template, { props: { class: 'abc', id: 'def' } })
   t.is(expected, result)
 })
 

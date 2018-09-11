@@ -1,7 +1,7 @@
 'use strict'
 
 const path = require('path')
-const { html, include, render } = require('./render')
+const { include, render } = require('./render')
 
 async function renderFile (file, values = {}, callback) {
   file = path.isAbsolute(file) ? file : path.join(__dirname, file)
@@ -24,4 +24,4 @@ async function renderFile (file, values = {}, callback) {
   return promise
 }
 
-module.exports = { html, render, renderFile }
+module.exports = { render, renderFile }

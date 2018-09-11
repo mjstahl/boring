@@ -19,7 +19,7 @@ const ESCAPE_REGEX =
   new RegExp(`(?:${Object.keys(ESCAPE_CHARS).join('|')})`, 'g')
 
 function html () {
-  const [parts, ...values] = arguments
+  let [parts, ...values] = arguments
   const rendered = parts
     .map((part, i) => {
       const boolAttr = BOOL_ATTR_REGEX.exec(part)

@@ -30,13 +30,6 @@ the provided `values`. If `callback` is specified the function will be called
 with the 0th argument set to any error or the 1st argument set to a result. If
 `callback` is not specific the function will return a `Promise`.
 
-```html`template: TemplateLiteral` -> Object```
-
-A tag function the evaluates and escapes the provided template literal. Just
-like all template literals, it will error out if any expressions reference
-variables not within the current scope. The Object returned is a string with
-extra properties, `.toString` the result for the least amount of surprises.
-
 ## Template API
 `include(file: String[, values: Object]) -> Promise` **(NOT SUPPORTED, Expected in v2.2)**
 

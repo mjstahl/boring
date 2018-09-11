@@ -18,16 +18,16 @@ async function include (file, values) {
     location = path.join(TEMPLATE_DIR, file)
     throw Error('"include" from within a template is not currently supported')
   }
-  return new Promise((resolve, reject) => {
-    try {
-      let contents = FILE_CACHE[location]
-      if (!contents) {
-        contents = fs.readFileSync(location, 'utf8')
-        FILE_CACHE[location] = contents
-      }
-      resolve(render(contents, values))
-    } catch (e) { reject(e) }
-  })
+  try {
+    let contents = FILE_CACHE[location]
+    if (!contents) {
+      contents = fs.readFileSync(location, 'utf8')
+      FILE_CACHE[location] = contents
+    }
+    return Promise.resolve(render(contents, values))
+  } catch (e) {
+    return Promise.reject(e)
+  }
 }
 
 async function render (content, values = {}) {
