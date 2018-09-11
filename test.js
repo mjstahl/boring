@@ -170,7 +170,7 @@ test.cb('renderFile with a callback, absent values', t => {
 test.cb('renderFile with callback and values', t => {
   t.plan(1)
   const expected = '<header><h1>Hello!</h1></header>'
-  renderFile('test/parts/header.html', { title: 'Hello!' }, (__, result) => {
+  renderFile('test/parts/header.html', { heading: 'Hello!' }, (__, result) => {
     t.is(expected, result)
     t.end()
   })
@@ -186,7 +186,7 @@ test('renderFile as promise, absent values', async t => {
 test('renderFile as promise with values', async t => {
   t.plan(1)
   const expected = '<header><h1>Hello!</h1></header>'
-  const result = await renderFile('test/parts/header.html', { title: 'Hello!' })
+  const result = await renderFile('test/parts/header.html', { heading: 'Hello!' })
   t.is(expected, result)
 })
 
@@ -194,14 +194,18 @@ test('renderFile that includes another template', async t => {
   t.plan(1)
   const expected =
 `<html>
+<head>
+  <title>So boring!</title>
+</head>
 <body>
   <header><h1>Whaaat!</h1></header>
 </body>
 </html>`
   const location = path.join(__dirname, 'test/index.html')
   const result = await renderFile(location, {
+    title: 'So boring!',
     header: {
-      title: 'Whaaat!'
+      heading: 'Whaaat!'
     }
   })
   t.is(expected, result)
