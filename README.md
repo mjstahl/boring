@@ -38,7 +38,7 @@ variables not within the current scope. The Object returned is a string with
 extra properties, `.toString` the result for the least amount of surprises.
 
 ## Template API
-(NOT SUPPORTED, Expected in v2.2) `include(file: String[, values: Object]) -> Promise`
+`include(file: String[, values: Object]) -> Promise` **(NOT SUPPORTED, Expected in v2.2)**
 
 Evaluate a template file located relative to the current template. If JavaScript
 expressions exist within the template, those expressions will be evaluated with
