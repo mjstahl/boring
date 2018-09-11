@@ -40,8 +40,7 @@ regards to the provided `values`.
 `raw(html: String) -> Object`
 
 Use `raw` in a template where the expression is expected to return HTML. You
-do not want to escape HTML twice. If used within a function (not in a template),
-`.toString` the result for the least amount of surprises.
+do not want to escape HTML twice.
 
 ## Express 3.x
 After installing the `boring` package, we set the location of the views and
@@ -84,8 +83,7 @@ app.get('/', (req, res) => {
 ```js
 const { render } = require('@mjstahl/boring')
 
-const template = '<p>High ${howMany}!</p>'
-const result = await render(template, {
+await render('<p>High ${howMany}!</p>', {
   howMany: 5
 })
 
@@ -99,12 +97,7 @@ const result = await render(template, {
 const { render } = require('@mjstahl/boring')
 
 const props = { class: 'abc', id: 'def' }
-const result = await render('<div ${props}>Hello</div>', {
-  props: {
-    class: 'abc',
-    id: 'def'
-  }
-})
+await render('<div ${props}>Hello</div>', { props })
 
 /**
 <div class="abc" id="def">Hello</div>
@@ -115,11 +108,10 @@ const result = await render('<div ${props}>Hello</div>', {
 ```js
 const { render } = require('@mjstahl/boring')
 
-const result =
-  await render('<input disabled=${disabled} autofocus=${focus} />', {
-    disabled: true,
-    focus: false
-  })
+await render('<input disabled=${disabled} autofocus=${focus} />', {
+  disabled: true,
+  focus: false
+})
 
 /**
 <input disabled="disabled" >
@@ -143,7 +135,7 @@ handle the whitespace in your template.
 const { renderFile } = require('@mjstahl/boring')
 
 const states = { AL: 'Alabama', GA: 'Georgia' }
-const result = await renderFile('views/states.html', { states })
+await renderFile('views/states.html', { states })
 
 /**
 <select>
@@ -161,7 +153,7 @@ interpolating HTML directly.
 ```js
 const { render } = require('@mjstahl/boring')
 
-const result = await render('<body>${raw(header)}</body>', {
+await render('<body>${raw(header)}</body>', {
   header: '<h1>This a regular string</h1>'
 })
 
@@ -210,7 +202,7 @@ of its child templates.
 ```js
 const { renderFile } = require('@mjstahl/boring')
 
-const result = renderFile('views/index.html', {
+renderFile('views/index.html', {
   title: 'Hello Boring!',
   header: { title: 'Woohoo Modularity!' },
   footer: {
