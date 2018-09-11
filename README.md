@@ -65,7 +65,7 @@ app.set('views', __dirname + '/views');
 Next create a file named `index.html` in the `./views` directory with the
 following content:
 
-```js
+```html
 <html>
 <head>
   <title>${title}</title>
@@ -197,7 +197,7 @@ const result = html`
 Let's assume we have a `views` directory that contained three files: `index.html`
 `header.html`, and `footer.html`. The contents of each file are as follows:
 
-```js
+```html
 <!-- views/index.html -->
 <html>
 <head>
@@ -211,14 +211,14 @@ Let's assume we have a `views` directory that contained three files: `index.html
 </html>
 ```
 
-```js
+```html
 <!-- views/header.html -->
 <header>
   <h1>${title}</h1>
 </header>
 ```
 
-```js
+```html
 <!-- views/footer.html -->
 <footer>
   <p>${year} &copy; ${company}</p>
