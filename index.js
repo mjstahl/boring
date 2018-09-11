@@ -1,30 +1,27 @@
-/* eslint-disable no-new-func */
-
 'use strict'
 
-const fs = require('fs')
-const { html, raw } = require('./html')
+const path = require('path')
+const { html, include, render } = require('./render')
 
-function renderFile (path, values, callback) {
-  fs.readFile(path, function (err, content) {
-    if (err) return callback(err)
-    render(content, values)
-      .then((result) => callback(null, result))
-      .catch((e) => callback(new Error(`${e.message} in "${path}"`)))
-  })
+async function renderFile (file, values = {}, callback) {
+  file = path.isAbsolute(file) ? file : path.join(__dirname, file)
+  if (typeof values === 'function') {
+    callback = values
+    values = {}
+  }
+
+  let promise
+  if (!callback) {
+    promise = new Promise((resolve, reject) => {
+      callback = (err, result) => err ? reject(err) : resolve(result)
+    })
+  }
+
+  include(file, values)
+    .then(result => callback(null, result))
+    .catch(e => callback(Error(`${e.message} in "${file}"`)))
+
+  return promise
 }
 
-async function render (content, values = {}) {
-  const [vars, vals] = Object.keys(values).reduce(([a, b], k) => {
-    a.push(k)
-    b.push(values[k])
-    return [a, b]
-  }, [[], []])
-  const body = `
-    'use strict'
-    return html\`${content}\`
-  `
-  const evaluate = new Function(...vars, 'html', 'raw', body)
-  return evaluate(...await Promise.all(vals), html, raw).toString()
-}
-module.exports = { html, raw, render, renderFile }
+module.exports = { html, render, renderFile }

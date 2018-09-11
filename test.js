@@ -2,8 +2,10 @@
 
 'use strict'
 
+const path = require('path')
 const test = require('ava')
-const { html, raw, render } = require('./index')
+const { renderFile } = require('./index')
+const { html, raw, render } = require('./render')
 
 test('server side render', t => {
   t.plan(2)
@@ -40,21 +42,21 @@ test('style attribute', t => {
       Hey ${name.toUpperCase()}, <span style="color: blue">This</span> is a card!!!
     </h1>
   `.toString()
-  t.is(result, expected)
+  t.is(expected, result)
 })
 
 test('unescape html', t => {
   t.plan(1)
   const expected = '<span>Hello <strong>there</strong></span>'
   const result = raw('<span>Hello <strong>there</strong></span>').toString()
-  t.is(result, expected)
+  t.is(expected, result)
 })
 
 test('unescape html inside html', t => {
   t.plan(1)
   const expected = '<span>Hello <strong>there</strong></span>'
   const result = html`${raw('<span>Hello <strong>there</strong></span>')}`.toString()
-  t.is(result, expected)
+  t.is(expected, result)
 })
 
 test('event attribute', t => {
@@ -71,14 +73,14 @@ test('event attribute', t => {
       Hello
     </div>
   `.toString()
-  t.is(result, expected)
+  t.is(expected, result)
 })
 
 test('boolean attribute', t => {
   t.plan(1)
   const expected = '<input disabled="disabled" >'
   const result = html`<input disabled=${true} autofocus=${false}>`.toString()
-  t.is(result, expected)
+  t.is(expected, result)
 })
 
 test('spread attributes', t => {
@@ -86,14 +88,22 @@ test('spread attributes', t => {
   const props = { class: 'abc', id: 'def' }
   const expected = '<div class="abc" id="def">Hello</div>'
   const result = html`<div ${props}>Hello</div>`.toString()
-  t.is(result, expected)
+  t.is(expected, result)
 })
 
 test('render HTML only', async t => {
   t.plan(1)
-  const template = '<p>Hello World</p>'
+  const expected = '<p>Hello World</p>'
+  const result = await render(expected)
+  t.is(expected, result)
+})
+
+test('evaluate JS expressions', async t => {
+  t.plan(1)
+  const template = '<p>High ${2 + 3}</p>'
+  const expected = '<p>High 5</p>'
   const result = await render(template)
-  t.is(template, result)
+  t.is(expected, result)
 })
 
 test('simple value', async t => {
@@ -101,7 +111,7 @@ test('simple value', async t => {
   const template = '<p>High ${howMany}</p>'
   const expected = '<p>High 5</p>'
   const result = await render(template, { howMany: 5 })
-  t.is(result, expected)
+  t.is(expected, result)
 })
 
 test('accept promises as values', async t => {
@@ -109,7 +119,7 @@ test('accept promises as values', async t => {
   const template = '<p>High ${howMany}</p>'
   const expected = '<p>High 5</p>'
   const result = await render(template, { howMany: Promise.resolve(5) })
-  t.is(result, expected)
+  t.is(expected, result)
 })
 
 test('unescaped/raw HTML value', async t => {
@@ -119,7 +129,7 @@ test('unescaped/raw HTML value', async t => {
   const result = await render(template, {
     highFive: '<strong>Up High</strong>'
   })
-  t.is(result, expected)
+  t.is(expected, result)
 })
 
 test('loop over object creating select options', async t => {
@@ -137,5 +147,59 @@ test('loop over object creating select options', async t => {
       GA: 'Georgia'
     }
   })
-  t.is(result, expected)
+  t.is(expected, result)
+})
+
+test.cb('renderFile with a callback, absent values', t => {
+  t.plan(1)
+  const expected = '<header>2018 &copy; Nobody Important</header>'
+  renderFile('test/parts/footer.html', (__, result) => {
+    t.is(expected, result)
+    t.end()
+  })
+})
+
+test.cb('renderFile with callback and values', t => {
+  t.plan(1)
+  const expected = '<header><h1>Hello!</h1></header>'
+  renderFile('test/parts/header.html', { title: 'Hello!' }, (__, result) => {
+    t.is(expected, result)
+    t.end()
+  })
+})
+
+test('renderFile as promise, absent values', async t => {
+  t.plan(1)
+  const expected = '<header>2018 &copy; Nobody Important</header>'
+  const result = await renderFile('test/parts/footer.html')
+  t.is(expected, result)
+})
+
+test('renderFile as promise with values', async t => {
+  t.plan(1)
+  const expected = '<header><h1>Hello!</h1></header>'
+  const result = await renderFile('test/parts/header.html', { title: 'Hello!' })
+  t.is(expected, result)
+})
+
+test.skip('renderFile that includes another template', async t => {
+  t.plan(1)
+  const expected =
+`<html>
+<head>
+  <title>Hello Boring!</title>
+</head>
+<body>
+  <header><h1>Whaaat!</h1></header>
+  <p>This is the body.</p>
+</body>
+</html>`
+  const location = path.join(__dirname, 'test/index.html')
+  const result = await renderFile(location, {
+    title: 'Hello Boring!',
+    header: {
+      title: 'Whaaat!'
+    }
+  })
+  t.is(expected, result)
 })

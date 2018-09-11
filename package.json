@@ -24,5 +24,8 @@
   "devDependencies": {
     "ava": "^0.25.0",
     "standard": "^12.0.1"
+  },
+  "ava": {
+    "failFast": true
   }
 }

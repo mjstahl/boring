@@ -2,22 +2,33 @@
 Templating using JavaScript's tagged template strings. Designed for server-side
 rendering.
 
+**There is no magic in this library. This is just JavaScript. You
+should be productive and not learn anything new. This library is boring and that
+is just the way we like it.**
+
 ## Installation
 ```sh
 $ npm install --save @mjstahl/boring
 ```
 
 ```js
-const { html, raw, render } = require('@mjstahl/boring')
+const { html, raw, render, renderFile } = require('@mjstahl/boring')
 ```
 
-## API
-
+## External API
 `render(template: String[, values: Object]) -> Promise`
 
 Render the template and return the String result. If JavaScript expressions
 exist within the template, those expressions will be evaluated with regards to
-the provided values.
+the provided `values`.
+
+`renderFile(path: String[, values: Object][, callback: Function]) -> Promise`
+
+Render the template located at `path`. If JavaScript expressions
+exist within the template, those expressions will be evaluated with regards to
+the provided `values`. If `callback` is specified the function will be called
+with the 0th argument set to any error or the 1st argument set to a result. If
+`callback` is not specific the function will return a `Promise`.
 
 ```html`template: TemplateLiteral` -> Object```
 
@@ -25,6 +36,13 @@ A tag function the evaluates and escapes the provided template literal. Just
 like all template literals, it will error out if any expressions reference
 variables not within the current scope. The Object returned is a string with
 extra properties, `.toString` the result for the least amount of surprises.
+
+## Template API
+(NOT SUPPORTED, Expected in v2.2) `include(file: String[, values: Object]) -> Promise`
+
+Evaluate a template file located relative to the current template. If JavaScript
+expressions exist within the template, those expressions will be evaluated with
+regards to the provided `values`.
 
 `raw(html: String) -> Object`
 
@@ -49,12 +67,12 @@ following content:
 
 ```js
 <html>
-  <head>
-    <title>${title}</title>
-  </head>
-  <body>
-    <h1>${message}</h1>
-  </body>
+<head>
+  <title>${title}</title>
+</head>
+<body>
+  <h1>${message}</h1>
+</body>
 </html>
 ```
 
@@ -70,7 +88,6 @@ app.get('/', (req, res) => {
 ```
 
 ## Usage
-
 ```js
 const { render } = require('@mjstahl/boring')
 
@@ -175,6 +192,72 @@ const result = html`
 </body>
  */
 ```
+
+### Modularizing Templates (NOT SUPPORTED, Expected in v2.2)
+Let's assume we have a `views` directory that contained three files: `index.html`
+`header.html`, and `footer.html`. The contents of each file are as follows:
+
+```js
+<!-- views/index.html -->
+<html>
+<head>
+  <title>${title}</title>
+</head>
+<body>
+  ${include('header.html', header)}
+  <p>This is the body.</p>
+  ${include('footer.html', footer)}
+</body>
+</html>
+```
+
+```js
+<!-- views/header.html -->
+<header>
+  <h1>${title}</h1>
+</header>
+```
+
+```js
+<!-- views/footer.html -->
+<footer>
+  <p>${year} &copy; ${company}</p>
+</footer>
+```
+
+Now we can then render the top-level template passing in values for it and all
+of its child templates.
+
+```js
+const { renderFile } = require('@mjstahl/boring')
+
+const result = renderFile('views/index.html', {
+  title: 'Hello Boring!',
+  header: { title: 'Woohoo Modularity!' },
+  footer: {
+    company: 'Nobody Important',
+    year: 2018
+  }
+})
+
+/**
+<html>
+<head>
+  <title>Hello Boring!</title>
+</head>
+<body>
+  <header>
+    <h1>Woohoo Modularity!</h1>
+  </header>
+  <p>This is the body.</p>
+  <footer>
+    <p>2018 &copy; Nobody Important</p>
+  </footer>
+</body>
+</html>
+*/
+```
+
 
 ## Attribution
 
