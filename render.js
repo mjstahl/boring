@@ -9,14 +9,14 @@ const { html, raw } = require('./html')
 const FILE_CACHE = {}
 let TEMPLATE_DIR = ''
 
-async function include (file, values) {
+function include (file, values) {
   let location
   if (path.isAbsolute(file)) {
     TEMPLATE_DIR = path.dirname(file)
     location = file
   } else {
     location = path.join(TEMPLATE_DIR, file)
-    throw Error('"include" from within a template is not currently supported')
+    // throw Error('"include" from within a template is not currently supported')
   }
   let contents = FILE_CACHE[location]
   if (!contents) {
