@@ -85,7 +85,7 @@ app.get('/', (req, res) => {
 const { render } = require('@mjstahl/boring')
 
 const template = '<p>High ${howMany}!</p>'
-const result = render(template, {
+const result = await render(template, {
   howMany: 5
 })
 
@@ -94,33 +94,17 @@ const result = render(template, {
  */
 ```
 
-```js
-const { html, raw } = require('@mjstahl/boring')
-
-const button = html`
-  <button>click</button>
-`
-const result = html`
-  <div class="testing">
-    ${button}
-  </div>
-`.toString()
-
-/**
-<div class="testing">
-  <button>click</button>
-</div>
- */
-```
-
 ### Spread Attributes
 ```js
-const { html } = require('@mjstahl/boring')
+const { render } = require('@mjstahl/boring')
 
 const props = { class: 'abc', id: 'def' }
-const result = html`
-  <div ${props}>Hello</div>
-`.toString()
+const result = await render('<div ${props}>Hello</div>', {
+  props: {
+    class: 'abc',
+    id: 'def'
+  }
+})
 
 /**
 <div class="abc" id="def">Hello</div>
@@ -129,11 +113,13 @@ const result = html`
 
 ### Boolean Attributes
 ```js
-const { html } = require('@mjstahl/boring')
+const { render } = require('@mjstahl/boring')
 
-const result = html`
-  <input disabled=${true} autofocus=${false}>
-`.toString()
+const result =
+  await render('<input disabled=${disabled} autofocus=${focus} />', {
+    disabled: true,
+    focus: false
+  })
 
 /**
 <input disabled="disabled" >
@@ -145,16 +131,19 @@ Boring will join list items with `''`. So if you want pretty DOM, you have to
 handle the whitespace in your template.
 
 ```js
-const { html } = require('@mjstahl/boring')
+<!-- views/states.html -->
+<select>
+  ${Object.keys(states).map((s) => {
+    return `<option value="${s}">${states[s]}</option>`
+  })}
+</select>
+```
+
+```js
+const { renderFile } = require('@mjstahl/boring')
 
 const states = { AL: 'Alabama', GA: 'Georgia' }
-const result = html`
-  <select>
-    ${Object.keys(states).map((s) => {
-      return `<option value="${s}">${states[s]}</option>`
-    })}
-  </select>
-`.toString()
+const result = await renderFile('views/states.html', { states })
 
 /**
 <select>
@@ -170,14 +159,11 @@ another function (for example: a markdown renderer). Use `boring/raw` for
 interpolating HTML directly.
 
 ```js
-const { html, raw } = require('@mjstahl/boring')
+const { render } = require('@mjstahl/boring')
 
-const header = '<h1>This a regular string</h1>'
-const result = html`
-  <body>
-    ${raw(header)}
-  </body>
-`.toString()
+const result = await render('<body>${raw(header)}</body>', {
+  header: '<h1>This a regular string</h1>'
+})
 
 /**
 <body>
