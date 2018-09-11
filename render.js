@@ -18,19 +18,15 @@ async function include (file, values) {
     location = path.join(TEMPLATE_DIR, file)
     throw Error('"include" from within a template is not currently supported')
   }
-  try {
-    let contents = FILE_CACHE[location]
-    if (!contents) {
-      contents = fs.readFileSync(location, 'utf8')
-      FILE_CACHE[location] = contents
-    }
-    return Promise.resolve(render(contents, values))
-  } catch (e) {
-    return Promise.reject(e)
+  let contents = FILE_CACHE[location]
+  if (!contents) {
+    contents = fs.readFileSync(location, 'utf8')
+    FILE_CACHE[location] = contents
   }
+  return renderTemplate(contents, values)
 }
 
-async function render (content, values = {}) {
+async function renderTemplate (content, values = {}) {
   const [vars, vals] = Object.keys(values).reduce(([a, b], k) => {
     a.push(k)
     b.push(values[k])
@@ -44,4 +40,4 @@ async function render (content, values = {}) {
   return evaluate(...await Promise.all(vals), html, include, raw).toString()
 }
 
-module.exports = { html, include, raw, render }
+module.exports = { include, renderTemplate }

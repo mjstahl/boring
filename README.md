@@ -16,11 +16,13 @@ const { render, renderFile } = require('@mjstahl/boring')
 ```
 
 ## External API
-`render(template: String[, values: Object]) -> Promise`
+`render(template: String[, values: Object][, callback: Function]) -> Promise`
 
-Render the template and return the String result. If JavaScript expressions
-exist within the template, those expressions will be evaluated with regards to
-the provided `values`.
+Render the template string. If JavaScript expressions exist within the template,
+those expressions will be evaluated with regards to the provided `values`. If
+`callback` is specified the function will be called with the 0th argument set to
+any error or the 1st argument set to a result. If `callback` is not specific the
+function will return a `Promise`.
 
 `renderFile(path: String[, values: Object][, callback: Function]) -> Promise`
 
@@ -31,7 +33,7 @@ with the 0th argument set to any error or the 1st argument set to a result. If
 `callback` is not specific the function will return a `Promise`.
 
 ## Template API
-`include(file: String[, values: Object]) -> Promise` **(NOT SUPPORTED, Expected in v3.1)**
+`include(file: String[, values: Object]) -> Promise` **(NOT SUPPORTED, Expected in v3.2)**
 
 Evaluate a template file located relative to the current template. If JavaScript
 expressions exist within the template, those expressions will be evaluated with
@@ -164,7 +166,7 @@ await render('<body>${raw(header)}</body>', {
  */
 ```
 
-### Modularizing Templates (NOT SUPPORTED, Expected in v3.1)
+### Modularizing Templates (NOT SUPPORTED, Expected in v3.2)
 Let's assume we have a `views` directory that contained three files: `index.html`
 `header.html`, and `footer.html`. The contents of each file are as follows:
 

@@ -139,6 +139,25 @@ test('loop over object creating select options', async t => {
   t.is(expected, result)
 })
 
+test.cb('render with a callback, absent values', t => {
+  t.plan(1)
+  const expected = '<header>2018 &copy; Nobody Important</header>'
+  render(expected, (__, result) => {
+    t.is(expected, result)
+    t.end()
+  })
+})
+
+test.cb('render with callback and values', t => {
+  t.plan(1)
+  const template = '<header><h1>${title}</h1></header>'
+  const expected = '<header><h1>Hello!</h1></header>'
+  render(template, { title: 'Hello!' }, (__, result) => {
+    t.is(expected, result)
+    t.end()
+  })
+})
+
 test.cb('renderFile with a callback, absent values', t => {
   t.plan(1)
   const expected = '<header>2018 &copy; Nobody Important</header>'
