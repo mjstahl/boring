@@ -12,7 +12,7 @@ $ npm install --save @mjstahl/boring
 ```
 
 ```js
-const { html, raw, render, renderFile } = require('@mjstahl/boring')
+const { render, renderFile } = require('@mjstahl/boring')
 ```
 
 ## External API
