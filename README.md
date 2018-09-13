@@ -204,7 +204,7 @@ of its child templates.
 ```js
 const { renderFile } = require('@mjstahl/boring')
 
-renderFile('views/index.html', {
+await renderFile('views/index.html', {
   title: 'Hello Boring!',
   header: { title: 'Woohoo Modularity!' },
   footer: {
