@@ -4,7 +4,7 @@
   "description": "Templating using JavaScript's tagged template strings. Designed for server-side rendering.",
   "main": "index.js",
   "scripts": {
-    "test": "standard && ava"
+    "test": "standard --fix && ava"
   },
   "repository": {
     "type": "git",

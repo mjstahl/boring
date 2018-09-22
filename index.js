@@ -3,7 +3,7 @@
 const path = require('path')
 const { include, renderTemplate } = require('./render')
 
-function __render (content, values, cb) {
+function renderWith (content, values, cb) {
   if (typeof values === 'function') [cb, values] = [values, {}]
   return (renderer) => {
     let promise
@@ -18,12 +18,12 @@ function __render (content, values, cb) {
 }
 
 function render (content, values = {}, cb) {
-  return __render(content, values, cb)(renderTemplate)
+  return renderWith(content, values, cb)(renderTemplate)
 }
 
 function renderFile (file, values = {}, cb) {
   file = path.isAbsolute(file) ? file : path.join(__dirname, file)
-  return __render(file, values, cb)(include)
+  return renderWith(file, values, cb)(include([]))
 }
 
 module.exports = { render, renderFile }

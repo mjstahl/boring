@@ -7,25 +7,21 @@ const path = require('path')
 const { html, raw } = require('./html')
 
 const FILE_CACHE = {}
-let TEMPLATE_DIR = ''
 
-async function include (file, values) {
-  let location
-  if (path.isAbsolute(file)) {
-    TEMPLATE_DIR = path.dirname(file)
-    location = file
-  } else {
-    location = path.join(TEMPLATE_DIR, file)
+function include (dirs) {
+  return async (file, values) => {
+    const location = path.isAbsolute(file) ? file : path.join(dirs[0], file)
+    dirs.unshift(path.dirname(location))
+    let contents = FILE_CACHE[location]
+    if (!contents) {
+      contents = fs.readFileSync(location, 'utf8')
+      FILE_CACHE[location] = contents
+    }
+    return renderTemplate(contents, values, dirs)
   }
-  let contents = FILE_CACHE[location]
-  if (!contents) {
-    contents = fs.readFileSync(location, 'utf8')
-    FILE_CACHE[location] = contents
-  }
-  return renderTemplate(contents, values)
 }
 
-async function renderTemplate (content, values = {}) {
+async function renderTemplate (content, values = {}, dirs) {
   const [vars, vals] = Object.keys(values).reduce(([a, b], k) => {
     a.push(k)
     b.push(values[k])
@@ -38,7 +34,7 @@ async function renderTemplate (content, values = {}) {
   const evaluate = new Function(...vars, 'html', 'include', 'raw', body)
   return Promise.all(vals).then((v) => {
     try {
-      return evaluate(...v, html, include, raw).then(r => r.toString())
+      return evaluate(...v, html, include(dirs), raw).then(r => r.toString())
     } catch (e) {
       return Promise.reject(e)
     }
