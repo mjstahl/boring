@@ -23,7 +23,7 @@ function render (content, values = {}, cb) {
 
 function renderFile (file, values = {}, cb) {
   file = path.isAbsolute(file) ? file : path.join(__dirname, file)
-  return renderWith(file, values, cb)(include([]))
+  return renderWith(file, values, cb)(include(path.dirname(file)))
 }
 
 module.exports = { render, renderFile }

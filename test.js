@@ -212,6 +212,16 @@ test.cb('render with callback and values', t => {
   })
 })
 
+test.cb('render with template include', t => {
+  const template = '<h1>${heading}</h1>${include(\'test/b/c/c.html\')}'
+  const expected = '<h1>Hello!</h1><h2>2018 &copy; Nobody Important</h2>'
+  render(template, { heading: 'Hello!' }, (err, result) => {
+    if (err) t.fail(err)
+    t.is(expected, result)
+    t.end()
+  })
+})
+
 test.cb('renderFile with a callback, absent values', t => {
   t.plan(1)
   const expected = '<h2>2018 &copy; Nobody Important</h2>'
