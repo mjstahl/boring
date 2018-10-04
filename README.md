@@ -1,9 +1,10 @@
+[![Build Status](https://travis-ci.com/mjstahl/boring.svg?branch=master)](https://travis-ci.com/mjstahl/boring)
+
 # boring
 Templating using JavaScript's tagged template strings. Designed for server-side
 rendering.
 
-**There is no magic in this library. This is just JavaScript. You
-should be productive and not learn anything new. This library is boring and that
+**There is no magic in this library. This is just JavaScript. This library is boring and that
 is just the way we like it.**
 
 ## Installation
