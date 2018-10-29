@@ -17,21 +17,16 @@ const { render, renderFile } = require('@mjstahl/boring')
 ```
 
 ## External API
-`render(template: String[, values: Object][, callback: Function]) -> Promise`
+`render(template: String[, values: Object][, callback: Function]) -> Promise | undefined`
 
 Render the template string. If JavaScript expressions exist within the template,
-those expressions will be evaluated with regards to the provided `values`. If
-`callback` is specified the function will be called with the 0th argument set to
-any error or the 1st argument set to a result. If `callback` is not specific the
-function will return a `Promise`.
+those expressions will be evaluated with regards to the provided `values`. If `callback` is specified, `render` will return `undefined` and `callback` will be evaluated with the 0th argument set to any error or the 1st argument set to a result. If `callback` is not specific the function will return a `Promise`.
 
-`renderFile(path: String[, values: Object][, callback: Function]) -> Promise`
+`renderFile(path: String[, values: Object][, callback: Function]) -> Promise | undefined`
 
 Render the template located at `path`. If JavaScript expressions
 exist within the template, those expressions will be evaluated with regards to
-the provided `values`. If `callback` is specified the function will be called
-with the 0th argument set to any error or the 1st argument set to a result. If
-`callback` is not specific the function will return a `Promise`.
+the provided `values`. If `callback` is specified, `renderFile` will return `undefined` and `callback` will be evaluated with the 0th argument set to any error or the 1st argument set to a result. If `callback` is not specific the function will return a `Promise`.
 
 ## Template API
 `include(file: String[, values: Object]) -> Promise`
