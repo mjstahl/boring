@@ -1,6 +1,6 @@
 {
   "name": "@mjstahl/boring",
-  "version": "3.2.6",
+  "version": "3.2.7",
   "description": "Templating using JavaScript's tagged template strings. Designed for server-side rendering.",
   "main": "index.js",
   "scripts": {
@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/mjstahl/boring#readme",
   "devDependencies": {
-    "ava": "^1.2.1",
-    "standard": "^12.0.1"
+    "ava": "^2.4.0",
+    "standard": "^14.3.1"
   },
   "ava": {
     "failFast": true

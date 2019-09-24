@@ -24,7 +24,7 @@ test('server side render', async t => {
 test('passing another element to html on server side render', async t => {
   t.plan(1)
   try {
-    const button = await render(`<button>click</button>`)
+    const button = await render('<button>click</button>')
     const rendered = await render(`
       <div class="testing">
         ${button}
